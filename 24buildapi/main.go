@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/rand"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -28,7 +29,20 @@ func (c *Course) isEmpty() bool {
 
 func main() {
 
-	// //fmt.Println(rand.Text())
+	//fmt.Println(rand.Text())
+
+	r := mux.NewRouter()
+	courses = append(courses, Course{CourseId: "OFOC3BGKGATWPASFVFZPQCWY2J", CourseName: "ReactJS", CoursePrice: 299, Author: &Author{AuthorName: "Hitesh Choudhary", Website: "lco.dev"}})
+	courses = append(courses, Course{CourseId: "65KZTV5UXQZWDUJZW64EN4CBYN", CourseName: "MERN Stack", CoursePrice: 199, Author: &Author{AuthorName: "Hitesh Choudhary", Website: "go.dev"}})
+
+	r.HandleFunc("/", serveHome).Methods("GET")
+	r.HandleFunc("/courses", getAllCourses).Methods("GET")
+	r.HandleFunc("/course/{id}", getCourseById).Methods("GET")
+	r.HandleFunc("/course", addACourse).Methods("POST")
+	r.HandleFunc("/course/{id}", updateCourse).Methods("PUT")
+	r.HandleFunc("/course/{id}", deleteCourse).Methods("DELETE")
+
+	log.Fatal(http.ListenAndServe(":4000", r))
 
 }
 
